@@ -1,0 +1,5 @@
+/home/gosse/Documents/todo-cli-app/target/debug/deps/colorchoice-bdebd8454dcf5e52.d: /home/gosse/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colorchoice-1.0.5/src/lib.rs
+
+/home/gosse/Documents/todo-cli-app/target/debug/deps/libcolorchoice-bdebd8454dcf5e52.rmeta: /home/gosse/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colorchoice-1.0.5/src/lib.rs
+
+/home/gosse/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colorchoice-1.0.5/src/lib.rs:
