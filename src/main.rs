@@ -1,8 +1,9 @@
 mod libs;
 use libs::read_input;
 
-fn main() {
+fn main()->std::io::Result<()>{
     
-    read_input();
+    read_input("data/file.json")?;
 
+    Ok(())
 }
