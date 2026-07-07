@@ -35,10 +35,22 @@ pub fn read_input(path:&str)->std::io::Result<()>{
             }
         }
         Action::Ajoute { add_nom } => {
-           save(&add_nom, path)?;
+            let mut  data = load(path)?;
+            for i in add_nom{
+                data.push(i);
+            }
+           save(&data, path)?;
         }
         Action::Supprimer { rm_nom } => {
-            println!("Suppression de : {:?}", rm_nom);
+            println!("Suppression de : {:#?}", rm_nom);
+            let mut data = load(path)?;
+            for i in rm_nom {
+                if let Some(v) = data.iter().position(move |x| *x == i) {
+                    data.remove(v);
+                }
+            }
+            save(&data, path)?;
+
         }
         _=>println!("autre")
     }
@@ -64,3 +76,4 @@ fn load(path: &str) -> std::io::Result<Vec<String>> {
     let items: Vec<String> = serde_json::from_str(&data).unwrap();
     Ok(items)
 }
+
