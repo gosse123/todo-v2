@@ -52,7 +52,7 @@ pub fn read_input(path:&str)->std::io::Result<()>{
             save(&data, path)?;
 
         }
-        _=>println!("autre")
+        _=>println!("commande non reconnu")
     }
 
     Ok(())
