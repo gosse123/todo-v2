@@ -341,7 +341,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "todo-cli-app"
+name = "todo-gosse"
 version = "0.1.0"
 dependencies = [
  "clap",
