@@ -5,7 +5,7 @@ use clap::{Parser,Subcommand};
 #[command(name = "gosse-todo", about = "Gestionnaire de tache")]
 pub struct Cli{
     #[command(subcommand)]
-    pub mode:Action
+    pub mode:Option<Action>
 }
 
 #[derive(Subcommand,Debug)]

@@ -32,6 +32,13 @@ pub fn print_summary(tasks: &[Task]) {
         }
     }
 }
+pub fn as_done(tasks: &mut [Task],num:usize){
+    for (i , task) in tasks.iter_mut().enumerate() {
+        if i == num-1{
+            task.completed = true;
+        }
+    }
+}
 
 pub fn print_detail_by_name(tasks: &[Task], name: &str) {
     match tasks.iter().find(|t| t.name == name) {
