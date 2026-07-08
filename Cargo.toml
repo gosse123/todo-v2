@@ -5,7 +5,6 @@ edition = "2024"
 authors = ["nahounou gosse"]
 description = "Une application CLI de gestion de tâches"
 license = "MIT"
-license-file = "LICENSE"
 repository = "https://github.com/gosse123/todo-v2"
 readme = "README.md"
 keywords = ["cli", "todo"]
