@@ -13,6 +13,8 @@ une application de ligne de commande pour gérer une liste de tâches.
 struct Task {
     id: u32,
     title: String,
+    desciption:String
     completed: bool,
+
 }
 ```
