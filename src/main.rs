@@ -8,14 +8,20 @@ use cli::{Cli,Action};
 use dialoguer::Input;
 use task::Task;
 
-const FILE_PATH:&str =  "/home/gosse/Documents/todo-cli-app/data";
+const FILE_PATH:&str =  "file.json";
 
 fn main()->std::io::Result<()>{
-let args = Cli::parse();
+
+    let mut tasks = load(FILE_PATH)?;
+    let args = Cli::parse();
     match args.mode {
-        Action::Affiche{num_of_task} => {
-            if num_of_task.is_empty(){
-                print_list(&Task);
+        Action::Affiche{name_aff} => {
+            if name_aff.is_empty(){
+                print_summary(&tasks);
+            }else {
+                for name in name_aff {
+                    print_detail_by_name(&tasks, &name);
+                }
             }
         }
         Action::Ajoute=> {
@@ -29,18 +35,14 @@ let args = Cli::parse();
                 .interact_text()
                 .unwrap();
 
-            Task.push(Task { name, description, completed: false });
-                    save(&data, FILE_PATH)?;
+            tasks.push(Task { name, description, completed: false });
+                    save(&tasks, FILE_PATH)?;
         }
         Action::Supprimer { rm_nom } => {
-            println!("Suppression de : {:#?}", rm_nom);
-            let mut data = load(FILE_PATH)?;
-            for i in rm_nom {
-                if let Some(v) = data.iter().position(move |x| *x == i) {
-                    data.remove(v);
-                }
+            for name in rm_nom{
+                remove_task(&mut tasks, &name);
             }
-            save(&data, FILE_PATH)?;
+            save(&tasks, FILE_PATH)?;
 
         }
         _=>println!("commande non reconnu")

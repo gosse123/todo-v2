@@ -11,14 +11,17 @@ pub struct Cli{
 #[derive(Subcommand,Debug)]
 pub enum Action {
     Affiche{
-        num_of_task:Vec<u32>
+        #[arg(num_args = 0..)]
+        name_aff:Vec<String>
     },
     Ajoute,
     Supprimer{
+        #[arg(required = true, num_args = 1..)]
         rm_nom:Vec<String>
     },
     Faire{
-        done_nom:Vec<String>
+        #[arg(required = true, num_args = 1..)]
+        indices: Vec<usize>,
     }
     
 }

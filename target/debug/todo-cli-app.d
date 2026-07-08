@@ -1,1 +1,1 @@
-/home/gosse/Documents/todo-cli-app/target/debug/todo-cli-app: /home/gosse/Documents/todo-cli-app/src/libs.rs /home/gosse/Documents/todo-cli-app/src/main.rs
+/home/gosse/Documents/todo-cli-app/target/debug/todo-cli-app: /home/gosse/Documents/todo-cli-app/src/cli.rs /home/gosse/Documents/todo-cli-app/src/main.rs /home/gosse/Documents/todo-cli-app/src/storage.rs /home/gosse/Documents/todo-cli-app/src/task.rs
