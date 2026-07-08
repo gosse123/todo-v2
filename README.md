@@ -20,7 +20,7 @@ Une application en ligne de commande pour gérer une liste de tâches, écrite e
 Cloner le dépôt puis compiler le projet :
 
 ```bash
-git clone <url-du-depot>
+git clone git@github.com:gosse123/todo-v2.git
 cd todo-cli-app
 cargo build --release
 ```
