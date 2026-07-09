@@ -127,7 +127,7 @@ Erreur : aucune tâche nommée "Python" n'existe.
 ## Marquer une tâche comme terminée
 
 ```bash
-todo-gosse done 2
+todo-gosse faire 2
 ```
 
 ---

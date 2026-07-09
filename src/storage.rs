@@ -1,23 +1,37 @@
 use crate::task::Task;
 use std::fs;
 use std::io::Write;
-use std::path::Path;
+use std::path::{PathBuf};
 use colored::Colorize;
+use directories::ProjectDirs;
+use crate::errors::TodoError;
 
-pub fn save(item:&[Task],path:&str)-> std::io::Result<()>{
+fn data_file()->Result<PathBuf,TodoError>{
+    let proj_dirs = match ProjectDirs::from("com","nahounou","todo-gosse")  {
+        Some(value)=>value,
+        None=>return Err(TodoError::AppDireError)
+    };
+    let data_dir = proj_dirs.data_dir();
+
+    fs::create_dir_all(data_dir)?;
+    Ok(data_dir.join("tasks.json"))
+}
+
+pub fn save(item:&[Task])-> Result<(),TodoError>{
     let json =serde_json::to_string_pretty(item)?;
+    let path:PathBuf =  data_file()?;
     let mut file = fs::File::create(path)?;
     file.write_all(json.as_bytes())?;
     Ok(())
 }
 
-pub fn load(path: &str) -> std::io::Result<Vec<Task>> {
-    let chemin = Path::new(path);
-    if !chemin.exists() {
+pub fn load() -> Result<Vec<Task>,TodoError> {
+    let path:PathBuf =  data_file()?;
+    if !path.exists() {
         return Ok(Vec::new()); // premier lancement : liste vide, pas d'erreur
     }
     let data = fs::read_to_string(path)?;
-    let items = serde_json::from_str(&data).unwrap();
+    let items = serde_json::from_str(&data)?;
     Ok(items)
 }
 

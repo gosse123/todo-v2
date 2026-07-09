@@ -1,18 +1,19 @@
 mod cli;
 mod storage;
 mod task;
-use clap::{Parser};
+mod errors;
 
+
+use clap::{Parser};
 use storage::*;
 use cli::{Cli,Action};
 use dialoguer::Input;
 use task::Task;
+use crate::errors::TodoError;
 
-const FILE_PATH:&str =  "file.json";
+fn main()->Result<(),TodoError>{
 
-fn main()->std::io::Result<()>{
-
-    let mut tasks = load(FILE_PATH)?;
+    let mut tasks = load()?;
     let args = Cli::parse();
     match args.mode {
         Some(Action::Affiche{name_aff}) => {
@@ -28,31 +29,29 @@ fn main()->std::io::Result<()>{
         Some(Action::Ajoute)=> {
            let name: String = Input::new()
                 .with_prompt("Nom de la tâche")
-                .interact_text()
-                .unwrap();
+                .interact_text()?;
             let name = name.trim().to_string();
 
             let description: String = Input::new()
                 .with_prompt("Description")
-                .interact_text()
-                .unwrap();
+                .interact_text()?;
             let description = description.trim().to_string();
 
             tasks.push(Task { name, description, completed: false });
-            save(&tasks, FILE_PATH)?;
+            save(&tasks)?;
         }
         Some(Action::Supprimer { rm_nom }) => {
             for name in rm_nom{
                 remove_task(&mut tasks, &name);
             }
-            save(&tasks, FILE_PATH)?;
+            save(&tasks)?;
 
         }
         Some(Action::Faire { indices })=>{
             for num in indices{
                 as_done(&mut tasks, num);
             }
-            save(&tasks, FILE_PATH)?;
+            save(&tasks)?;
         }
         _=>println!("commande not reconnu")
     }
