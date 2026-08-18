@@ -22,6 +22,9 @@ pub enum Action {
     Faire{
         #[arg(required = true, num_args = 1..)]
         indices: Vec<usize>,
+    },
+    modifie{
+        #[arg(required=true)]
     }
     
 }
