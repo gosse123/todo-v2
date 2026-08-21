@@ -1,30 +1,29 @@
-use clap::{Parser,Subcommand};
-
+use clap::{Parser, Subcommand};
 
 #[derive(Debug, Parser)]
 #[command(name = "gosse-todo", about = "Gestionnaire de tache")]
-pub struct Cli{
+pub struct Cli {
     #[command(subcommand)]
-    pub mode:Option<Action>
+    pub mode: Option<Action>,
 }
 
-#[derive(Subcommand,Debug)]
+#[derive(Subcommand, Debug)]
 pub enum Action {
-    Affiche{
+    Affiche {
         #[arg(num_args = 0..)]
-        name_aff:Vec<String>
+        name_aff: Vec<String>,
     },
     Ajoute,
-    Supprimer{
+    Supprimer {
         #[arg(required = true, num_args = 1..)]
-        rm_nom:Vec<String>
+        rm_nom: Vec<String>,
     },
-    Faire{
+    Faire {
         #[arg(required = true, num_args = 1..)]
         indices: Vec<usize>,
     },
-    modifie{
-        #[arg(required=true)]
-    }
-    
+    Modifie {
+        #[arg(required = true, num_args = 1)]
+        indice: i32,
+    },
 }

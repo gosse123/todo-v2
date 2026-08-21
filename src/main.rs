@@ -47,6 +47,9 @@ fn main() -> Result<(), TodoError> {
             }
             save(&tasks)?;
         }
+        Some(Action::Modifie { indice }) => {
+            println!("Modifie avec succes")
+        }
         _ => println!("commande not reconnu"),
     }
 
