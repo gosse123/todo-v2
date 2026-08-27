@@ -53,7 +53,7 @@ fn main() -> Result<(), TodoError> {
             let promt = format!("Entrée la nouvelle description de {update_name}");
             let update_descrition: String = Input::new().with_prompt(promt).interact_text()?;
             let due_date: String = Input::new()
-                .with_prompt("Entrée la date d'échance: ")
+                .with_prompt("Entrée la date d'échance format(%d-%m-%Y): ")
                 .interact_text()?;
             if update_tasks(
                 &update_name,
@@ -62,7 +62,6 @@ fn main() -> Result<(), TodoError> {
                 &mut tasks,
                 &due_date,
             ) {
-                println!("{tasks:?}");
                 save(&tasks)?;
                 println!("Modifie {update_name} avec succes: {new_name} et {update_descrition}",)
             } else {

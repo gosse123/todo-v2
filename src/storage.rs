@@ -101,11 +101,13 @@ pub fn update_tasks(
     tasks: &mut Vec<Task>,
     due_date: &str,
 ) -> bool {
+    let mut found = false;
     if new_name.trim().is_empty() || new_name.trim().is_empty() || due_date.trim().is_empty() {
-        false
+        found = false;
     } else {
         for task in tasks {
             if task.name == hold_new {
+                found = true;
                 task.name = new_name.to_string();
 
                 task.description = new_des.to_string();
@@ -117,12 +119,12 @@ pub fn update_tasks(
                 task.updateat = Some(Utc::now());
             }
         }
-        true
     }
+    found
 }
 
 fn parse_date(date: &str) -> Result<NaiveDate, String> {
-    match NaiveDate::parse_from_str(date, "%Y-%m-%d") {
+    match NaiveDate::parse_from_str(date, "%d-%m-%Y") {
         Ok(valide) => Ok(valide),
         Err(_) => return Err("format invalide".to_string()),
     }
