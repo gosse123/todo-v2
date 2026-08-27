@@ -1,7 +1,7 @@
 use crate::errors::TodoError;
 use crate::task::{Etat, Task};
+use chrono::{NaiveDate, Utc};
 use colored::Colorize;
-use core::task;
 use directories::ProjectDirs;
 use std::fs;
 use std::io::Write;
@@ -58,19 +58,24 @@ pub fn print_detail_by_name(tasks: &[Task], name: &str) {
     match tasks.iter().find(|t| t.name == name) {
         Some(task) => {
             println!("Tâche \"{}\":", task.name);
-            println!("  Description : {}", task.description);
+            println!("Description : {}", task.description);
             println!("Date de creation de la tâche: {}", task.createat);
             if let Some(temps) = task.updateat {
                 println!("Dernire mise a jour de la tâche: {}", temps);
             }
             println!(
-                "  status    : {}",
+                "status : {}",
                 match &task.status {
                     Etat::Todo => "non terminé",
                     Etat::Inprogress => "en cours",
                     Etat::Done => "terminé",
                 }
             );
+            if let Some(due_date) = task.due_date {
+                println!("date d'échance: {due_date}")
+            } else {
+                println!("pas de date d'échance")
+            }
         }
         None => {
             eprintln!("Erreur : aucune tâche nommée \"{}\" n'existe.", name);
@@ -89,22 +94,36 @@ pub fn remove_task(tasks: &mut Vec<Task>, name: &str) {
     }
 }
 
-pub fn update_tasks(hold_new: &str, new_name: &str, new_des: &str, tasks: &mut Vec<Task>) -> bool {
-    if new_name.is_empty() && new_name.is_empty() {
+pub fn update_tasks(
+    hold_new: &str,
+    new_name: &str,
+    new_des: &str,
+    tasks: &mut Vec<Task>,
+    due_date: &str,
+) -> bool {
+    if new_name.trim().is_empty() || new_name.trim().is_empty() || due_date.trim().is_empty() {
         false
-    } else if new_name.is_empty() == false && new_des.is_empty() == true {
-        for task in tasks {
-            if task.name == hold_new {
-                task.name = new_name.to_string();
-            }
-        }
-        true
     } else {
         for task in tasks {
             if task.name == hold_new {
+                task.name = new_name.to_string();
+
                 task.description = new_des.to_string();
+                if let Ok(valde) = parse_date(due_date.trim()) {
+                    task.due_date = Some(valde)
+                } else {
+                    println!("format invalide utilise se format: %Y-%m-%d")
+                }
+                task.updateat = Some(Utc::now());
             }
         }
         true
+    }
+}
+
+fn parse_date(date: &str) -> Result<NaiveDate, String> {
+    match NaiveDate::parse_from_str(date, "%Y-%m-%d") {
+        Ok(valide) => Ok(valide),
+        Err(_) => return Err("format invalide".to_string()),
     }
 }

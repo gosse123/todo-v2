@@ -1,4 +1,4 @@
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, NaiveDate, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -8,6 +8,7 @@ pub struct Task {
     pub status: Etat,
     pub createat: DateTime<Utc>,
     pub updateat: Option<DateTime<Utc>>,
+    pub due_date: Option<NaiveDate>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -25,6 +26,7 @@ impl Task {
             status: Etat::Todo,
             createat: Utc::now(),
             updateat: None,
+            due_date: None,
         }
     }
 }

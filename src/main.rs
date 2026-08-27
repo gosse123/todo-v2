@@ -25,11 +25,11 @@ fn main() -> Result<(), TodoError> {
         }
         Some(Action::Ajoute) => {
             let name: String = Input::new()
-                .with_prompt("Nom de la tâche")
+                .with_prompt("Nom de la tâche: ")
                 .interact_text()?;
             let name = name.trim().to_string();
 
-            let description: String = Input::new().with_prompt("Description").interact_text()?;
+            let description: String = Input::new().with_prompt("Description: ").interact_text()?;
             let description = description.trim().to_string();
 
             tasks.push(Task::new(name, description));
@@ -52,17 +52,22 @@ fn main() -> Result<(), TodoError> {
             let new_name: String = Input::new().with_prompt(promt).interact_text()?;
             let promt = format!("Entrée la nouvelle description de {update_name}");
             let update_descrition: String = Input::new().with_prompt(promt).interact_text()?;
-            if update_tasks(&update_name, &new_name, &update_descrition, &mut tasks) {
+            let due_date: String = Input::new()
+                .with_prompt("Entrée la date d'échance: ")
+                .interact_text()?;
+            if update_tasks(
+                &update_name,
+                &new_name,
+                &update_descrition,
+                &mut tasks,
+                &due_date,
+            ) {
+                println!("{tasks:?}");
                 save(&tasks)?;
+                println!("Modifie {update_name} avec succes: {new_name} et {update_descrition}",)
             } else {
                 println!("aucune modification de {update_name} a été faite")
             }
-
-            println!(
-                "Modifie {update_name} avec succes: {new_name}:{} et {update_descrition}:{}",
-                new_name.len(),
-                update_descrition.len()
-            )
         }
         _ => println!("commande not reconnu"),
     }

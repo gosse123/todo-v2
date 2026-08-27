@@ -42,4 +42,3 @@ impl From<dialoguer::Error> for TodoError {
         TodoError::InvalidInputError(value)
     }
 }
-
