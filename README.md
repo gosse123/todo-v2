@@ -187,7 +187,7 @@ todo-gosse
 
 # Améliorations futures
 
-- [ ] Modifier une tâche existante
+- [x] Modifier une tâche existante
 - [ ] Ajouter une date d'échéance
 - [ ] Ajouter des priorités
 - [ ] Ajouter des catégories
