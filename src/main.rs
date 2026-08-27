@@ -47,8 +47,22 @@ fn main() -> Result<(), TodoError> {
             }
             save(&tasks)?;
         }
-        Some(Action::Modifie { indice }) => {
-            println!("Modifie avec succes")
+        Some(Action::Modifie { update_name }) => {
+            let promt = format!("Entrée le nouveau non de {update_name}");
+            let new_name: String = Input::new().with_prompt(promt).interact_text()?;
+            let promt = format!("Entrée la nouvelle description de {update_name}");
+            let update_descrition: String = Input::new().with_prompt(promt).interact_text()?;
+            if update_tasks(&update_name, &new_name, &update_descrition, &mut tasks) {
+                save(&tasks)?;
+            } else {
+                println!("aucune modification de {update_name} a été faite")
+            }
+
+            println!(
+                "Modifie {update_name} avec succes: {new_name}:{} et {update_descrition}:{}",
+                new_name.len(),
+                update_descrition.len()
+            )
         }
         _ => println!("commande not reconnu"),
     }

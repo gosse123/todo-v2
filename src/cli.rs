@@ -24,6 +24,6 @@ pub enum Action {
     },
     Modifie {
         #[arg(required = true, num_args = 1)]
-        indice: i32,
+        update_name: String,
     },
 }

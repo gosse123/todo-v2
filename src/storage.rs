@@ -1,6 +1,7 @@
 use crate::errors::TodoError;
 use crate::task::{Etat, Task};
 use colored::Colorize;
+use core::task;
 use directories::ProjectDirs;
 use std::fs;
 use std::io::Write;
@@ -88,3 +89,22 @@ pub fn remove_task(tasks: &mut Vec<Task>, name: &str) {
     }
 }
 
+pub fn update_tasks(hold_new: &str, new_name: &str, new_des: &str, tasks: &mut Vec<Task>) -> bool {
+    if new_name.is_empty() && new_name.is_empty() {
+        false
+    } else if new_name.is_empty() == false && new_des.is_empty() == true {
+        for task in tasks {
+            if task.name == hold_new {
+                task.name = new_name.to_string();
+            }
+        }
+        true
+    } else {
+        for task in tasks {
+            if task.name == hold_new {
+                task.description = new_des.to_string();
+            }
+        }
+        true
+    }
+}

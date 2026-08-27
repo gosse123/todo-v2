@@ -1,21 +1,27 @@
 use core::fmt;
 
 #[derive(Debug)]
-pub enum TodoError{
+pub enum TodoError {
     CreateDirError(std::io::Error),
     SereliasisationError(serde_json::Error),
     AppDireError,
-    InvalidInputError(dialoguer::Error)
-
+    InvalidInputError(dialoguer::Error),
 }
 
 impl fmt::Display for TodoError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            TodoError::CreateDirError(e)=>write!(f,"erreur lors de la creation du dossier: {}",e),
-            TodoError::SereliasisationError(e)=>write!(f,"erreur d'ecriture/lectures des donnes: {}",e),
-            TodoError::AppDireError=>write!(f,"erreur lors de la mise en place du chemin de dossier de l'application"),
-            TodoError::InvalidInputError(e)=>write!(f,"entre invalide : {}",e)
+            TodoError::CreateDirError(e) => {
+                write!(f, "erreur lors de la creation du dossier: {}", e)
+            }
+            TodoError::SereliasisationError(e) => {
+                write!(f, "erreur d'ecriture/lectures des donnes: {}", e)
+            }
+            TodoError::AppDireError => write!(
+                f,
+                "erreur lors de la mise en place du chemin de dossier de l'application"
+            ),
+            TodoError::InvalidInputError(e) => write!(f, "entre invalide : {}", e),
         }
     }
 }
@@ -36,3 +42,4 @@ impl From<dialoguer::Error> for TodoError {
         TodoError::InvalidInputError(value)
     }
 }
+
