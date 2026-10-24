@@ -6,6 +6,7 @@ pub enum TodoError {
     SereliasisationError(serde_json::Error),
     AppDireError,
     InvalidInputError(dialoguer::Error),
+    TaskNotFound(String)
 }
 
 impl fmt::Display for TodoError {
@@ -22,6 +23,7 @@ impl fmt::Display for TodoError {
                 "erreur lors de la mise en place du chemin de dossier de l'application"
             ),
             TodoError::InvalidInputError(e) => write!(f, "entre invalide : {}", e),
+            TodoError::TaskNotFound(e)=>write!(f,"tache introuvable  : {}",e),
         }
     }
 }

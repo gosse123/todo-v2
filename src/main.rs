@@ -1,4 +1,6 @@
 mod cli;
+mod display;
+mod todo_list;
 mod errors;
 mod storage;
 mod task;

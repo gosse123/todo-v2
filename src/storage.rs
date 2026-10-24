@@ -46,13 +46,7 @@ pub fn print_summary(tasks: &[Task]) {
         }
     }
 }
-pub fn as_done(tasks: &mut [Task], num: usize) {
-    for (i, task) in tasks.iter_mut().enumerate() {
-        if i == num - 1 {
-            task.status = Etat::Done;
-        }
-    }
-}
+
 
 pub fn print_detail_by_name(tasks: &[Task], name: &str) {
     match tasks.iter().find(|t| t.name == name) {
@@ -82,17 +76,7 @@ pub fn print_detail_by_name(tasks: &[Task], name: &str) {
         }
     }
 }
-pub fn remove_task(tasks: &mut Vec<Task>, name: &str) {
-    match tasks.iter().position(|t| t.name == name) {
-        Some(index) => {
-            tasks.remove(index);
-            println!("Tâche \"{}\" supprimée.", name);
-        }
-        None => {
-            eprintln!("Erreur : aucune tâche nommée \"{}\" n'existe.", name);
-        }
-    }
-}
+
 
 pub fn update_tasks(
     hold_new: &str,
