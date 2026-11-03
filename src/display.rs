@@ -1,45 +1,47 @@
-use crate::task::{Task,Etat};
+use crate::task::{Etat, Task};
 use colored::Colorize;
 
-pub fn print_summary(tasks: &[Task]) {
+pub fn print_summary(tasks: &[Task]) -> String {
+    let mut summary = String::new();
     for (i, task) in tasks.iter().enumerate() {
-        let n = i + 1;
+        let number = i + 1;
+        let (marker, name) = match task.status {
+            Etat::Done => ("✓".green().to_string(), task.name.dimmed().to_string()),
+            Etat::Inprogress => ("o".yellow().to_string(), task.name.dimmed().to_string()),
+            Etat::Todo => ("☐".blue().to_string(), task.name.clone()),
+        };
+        if !summary.is_empty() {
+            summary.push('\n');
+        }
+        summary.push_str(&format!("{number}. {marker} {name}"));
+    }
+    summary
+}
+
+pub fn print_detail_by_name(tasks: &[Task], name: &str) -> Option<String> {
+    let task = tasks.iter().find(|t| t.name == name)?;
+
+    let mut detail = String::new();
+    detail.push_str(&format!("Tâche \"{}\":\n", task.name));
+    detail.push_str(&format!("Description : {}\n", task.description));
+    detail.push_str(&format!(
+        "Date de creation de la tâche: {}\n",
+        task.createat
+    ));
+    if let Some(updateat) = task.updateat {
+        detail.push_str(&format!("Dernire mise a jour de la tâche: {updateat}\n"));
+    }
+    detail.push_str(&format!(
+        "status : {}\n",
         match task.status {
-            Etat::Done => println!("{}. {} {}", n, "✓".green(), task.name.dimmed()),
-            Etat::Inprogress => println!("{}. {} {}", n, "o".yellow(), task.name.dimmed()),
-            Etat::Todo => println!("{}. {} {}", n, "☐".blue(), task.name),
+            Etat::Todo => "non terminé",
+            Etat::Inprogress => "en cours",
+            Etat::Done => "terminé",
         }
+    ));
+    match task.due_date {
+        Some(due_date) => detail.push_str(&format!("date d'échance: {due_date}")),
+        None => detail.push_str("pas de date d'échance"),
     }
+    Some(detail)
 }
-
-
-pub fn print_detail_by_name(tasks: &[Task], name: &str) {
-    match tasks.iter().find(|t| t.name == name) {
-        Some(task) => {
-            println!("Tâche \"{}\":", task.name);
-            println!("Description : {}", task.description);
-            println!("Date de creation de la tâche: {}", task.createat);
-            if let Some(temps) = task.updateat {
-                println!("Dernire mise a jour de la tâche: {}", temps);
-            }
-            println!(
-                "status : {}",
-                match &task.status {
-                    Etat::Todo => "non terminé",
-                    Etat::Inprogress => "en cours",
-                    Etat::Done => "terminé",
-                }
-            );
-            if let Some(due_date) = task.due_date {
-                println!("date d'échance: {due_date}")
-            } else {
-                println!("pas de date d'échance")
-            }
-        }
-        None => {
-            eprintln!("Erreur : aucune tâche nommée \"{}\" n'existe.", name);
-        }
-    }
-}
-
-

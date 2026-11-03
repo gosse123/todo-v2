@@ -1,7 +1,7 @@
 use chrono::{DateTime, NaiveDate, Utc};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Task {
     pub name: String,
     pub description: String,
@@ -11,18 +11,25 @@ pub struct Task {
     pub due_date: Option<NaiveDate>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Etat {
     Todo,
     Inprogress,
     Done,
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct TaskUpdate {
+    pub name: String,
+    pub description: String,
+    pub due_date: NaiveDate,
+}
+
 impl Task {
-    pub fn new(nom: String, des: String) -> Task {
+    pub fn new(name: String, description: String) -> Task {
         Task {
-            name: nom,
-            description: des,
+            name,
+            description,
             status: Etat::Todo,
             createat: Utc::now(),
             updateat: None,
