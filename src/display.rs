@@ -45,3 +45,59 @@ pub fn print_detail_by_name(tasks: &[Task], name: &str) -> Option<String> {
     }
     Some(detail)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{print_detail_by_name, print_summary};
+    use crate::task::{Etat, Task};
+
+    fn tache(nom: &str) -> Task {
+        Task::new(nom.to_string(), "Description".to_string()).unwrap()
+    }
+
+    #[test]
+    fn le_resume_numerote_les_taches_depuis_1() {
+        colored::control::set_override(false);
+        let tasks = vec![tache("première"), tache("deuxième")];
+
+        let summary = print_summary(&tasks);
+
+        assert_eq!(summary, "1. ☐ première\n2. ☐ deuxième");
+    }
+
+    #[test]
+    fn le_resume_marque_une_tache_terminée() {
+        colored::control::set_override(false);
+        let mut tasks = vec![tache("achevée")];
+        tasks[0].status = Etat::Done;
+
+        let summary = print_summary(&tasks);
+
+        assert_eq!(summary, "1. ✓ achevée");
+    }
+
+    #[test]
+    fn le_resume_d_une_liste_vide_est_vide() {
+        colored::control::set_override(false);
+
+        assert_eq!(print_summary(&[]), "");
+    }
+
+    #[test]
+    fn le_detail_d_une_tache_connue_contient_son_nom_et_sa_description() {
+        colored::control::set_override(false);
+        let tasks = vec![tache("rust")];
+
+        let detail = print_detail_by_name(&tasks, "rust").unwrap();
+
+        assert!(detail.starts_with("Tâche \"rust\":"));
+        assert!(detail.contains("Description : Description"));
+    }
+
+    #[test]
+    fn le_detail_d_une_tache_inconnue_est_absent() {
+        let tasks = vec![tache("rust")];
+
+        assert!(print_detail_by_name(&tasks, "python").is_none());
+    }
+}

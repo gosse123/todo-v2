@@ -41,3 +41,27 @@ impl Task {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{Etat, Task};
+    use crate::errors::TodoError;
+
+    #[test]
+    fn une_nouvelle_tache_est_a_faire_sans_date_ni_mise_a_jour() {
+        let task = Task::new("Acheter du pain".to_string(), "Au boulanger".to_string()).unwrap();
+
+        assert_eq!(task.name, "Acheter du pain");
+        assert_eq!(task.description, "Au boulanger");
+        assert_eq!(task.status, Etat::Todo);
+        assert!(task.updateat.is_none());
+        assert!(task.due_date.is_none());
+    }
+
+    #[test]
+    fn refuse_un_nom_vide() {
+        let resultat = Task::new("   ".to_string(), "Description".to_string());
+
+        assert!(matches!(resultat, Err(TodoError::NomInvalide)));
+    }
+}

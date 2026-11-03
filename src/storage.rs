@@ -37,3 +37,54 @@ pub fn save(path: &Path, tasks: &[Task]) -> Result<(), TodoError> {
     file.write_all(json.as_bytes())?;
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{load, save};
+    use crate::errors::TodoError;
+    use crate::task::Task;
+
+    fn tache(nom: &str) -> Task {
+        Task::new(nom.to_string(), "Description".to_string()).unwrap()
+    }
+
+    #[test]
+    fn un_fichier_inexistant_est_une_liste_vide() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("tasks.json");
+
+        assert!(load(&path).unwrap().is_empty());
+    }
+
+    #[test]
+    fn un_fichier_vide_est_une_liste_vide() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("tasks.json");
+        std::fs::write(&path, "   \n").unwrap();
+
+        assert!(load(&path).unwrap().is_empty());
+    }
+
+    #[test]
+    fn sauvegarde_puis_charge_les_memes_taches() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("tasks.json");
+        let tasks = vec![tache("a"), tache("b")];
+
+        save(&path, &tasks).unwrap();
+
+        assert_eq!(load(&path).unwrap(), tasks);
+    }
+
+    #[test]
+    fn un_fichier_invalide_renvoie_une_erreur_de_serialisation() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("tasks.json");
+        std::fs::write(&path, "{ pas du json }").unwrap();
+
+        assert!(matches!(
+            load(&path),
+            Err(TodoError::SereliasisationError(_))
+        ));
+    }
+}
