@@ -30,12 +30,18 @@ pub fn run(cli: &Cli, path: &Path, prompter: &dyn Prompter) -> Result<(), TodoEr
         Some(Action::Ajoute) => {
             let name = prompter.ask("Nom de la tâche")?.trim().to_string();
             let description = prompter.ask("Description")?.trim().to_string();
-            tasks.push(Task::new(name, description));
+            tasks.push(Task::new(name, description)?);
             storage::save(path, &tasks)?;
         }
         Some(Action::Supprimer { rm_nom }) => {
             for name in rm_nom {
-                let _ = todo_list::remove_task(&mut tasks, name);
+                match todo_list::remove_task(&mut tasks, name) {
+                    Ok(_) => {}
+                    Err(TodoError::TaskNotFound(missing)) => {
+                        eprintln!("Erreur : aucune tâche nommée \"{missing}\" n'existe.")
+                    }
+                    Err(e) => return Err(e),
+                }
             }
             storage::save(path, &tasks)?;
         }

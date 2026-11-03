@@ -17,17 +17,17 @@ impl fmt::Display for TodoError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             TodoError::CreateDirError(e) => {
-                write!(f, "erreur lors de la creation du dossier: {}", e)
+                write!(f, "erreur lors de la création du dossier : {e}")
             }
             TodoError::SereliasisationError(e) => {
-                write!(f, "erreur d'ecriture/lectures des donnes: {}", e)
+                write!(f, "erreur de lecture/écriture des données : {e}")
             }
             TodoError::AppDireError => write!(
                 f,
                 "erreur lors de la mise en place du chemin de dossier de l'application"
             ),
-            TodoError::InvalidInputError(e) => write!(f, "entre invalide : {}", e),
-            TodoError::TaskNotFound(e) => write!(f, "tache introuvable  : {}", e),
+            TodoError::InvalidInputError(e) => write!(f, "entrée invalide : {e}"),
+            TodoError::TaskNotFound(e) => write!(f, "tâche introuvable : {e}"),
             TodoError::NomInvalide => write!(f, "le nom de la tâche ne peut pas être vide"),
             TodoError::DescriptionInvalide => {
                 write!(f, "la description de la tâche ne peut pas être vide")

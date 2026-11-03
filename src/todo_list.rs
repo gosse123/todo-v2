@@ -19,6 +19,12 @@ pub fn update_tasks(
     update: TaskUpdate,
     tasks: &mut [Task],
 ) -> Result<(), TodoError> {
+    if update.name.trim().is_empty() {
+        return Err(TodoError::NomInvalide);
+    }
+    if update.description.trim().is_empty() {
+        return Err(TodoError::DescriptionInvalide);
+    }
     let index = find_index(tasks, current_name)
         .ok_or_else(|| TodoError::TaskNotFound(current_name.to_string()))?;
     let task = &mut tasks[index];

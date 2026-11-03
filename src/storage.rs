@@ -19,6 +19,9 @@ pub fn load(path: &Path) -> Result<Vec<Task>, TodoError> {
         return Ok(Vec::new());
     }
     let data = fs::read_to_string(path)?;
+    if data.trim().is_empty() {
+        return Ok(Vec::new());
+    }
     Ok(serde_json::from_str(&data)?)
 }
 

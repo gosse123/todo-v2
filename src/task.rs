@@ -1,3 +1,4 @@
+use crate::errors::TodoError;
 use chrono::{DateTime, NaiveDate, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -26,14 +27,17 @@ pub struct TaskUpdate {
 }
 
 impl Task {
-    pub fn new(name: String, description: String) -> Task {
-        Task {
+    pub fn new(name: String, description: String) -> Result<Task, TodoError> {
+        if name.trim().is_empty() {
+            return Err(TodoError::NomInvalide);
+        }
+        Ok(Task {
             name,
             description,
             status: Etat::Todo,
             createat: Utc::now(),
             updateat: None,
             due_date: None,
-        }
+        })
     }
 }
