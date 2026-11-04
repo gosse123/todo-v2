@@ -130,6 +130,10 @@ Erreur : aucune tâche nommée "Python" n'existe.
 todo-gosse faire 2
 ```
 
+Le numéro correspond à celui affiché par `affiche` (la numérotation
+commence à 1). Un numéro qui n'existe pas est refusé avec un message
+d'erreur et le fichier n'est pas modifié.
+
 ---
 
 ## Supprimer une ou plusieurs tâches
@@ -137,6 +141,10 @@ todo-gosse faire 2
 ```bash
 todo-gosse supprimer Rust Projet
 ```
+
+Seule la première tâche portant ce nom est supprimée. Un nom inconnu est
+signalé sur la sortie d'erreur, les autres suppressions sont quand même
+appliquées.
 
 ---
 
@@ -152,6 +160,26 @@ Au premier lancement :
 
 Aucune configuration supplémentaire n'est nécessaire.
 
+Le fichier est stocké dans le dossier de données de l'application :
+
+```text
+~/.local/share/todo-gosse/tasks.json
+```
+
+La variable d'environnement `XDG_DATA_HOME` est respectée sur Linux.
+
+---
+
+## Modifier une tâche
+
+```bash
+todo-gosse modifie Rust
+```
+
+Le programme demande le nouveau nom, la nouvelle description et la date
+d'échéance, au format `%d-%m-%Y` (par exemple `01-02-2026`). Si la date
+est invalide, la tâche n'est pas modifiée du tout.
+
 ---
 
 # Structure du projet
@@ -160,16 +188,35 @@ Aucune configuration supplémentaire n'est nécessaire.
 todo-gosse
 │
 ├── src
-│   ├── main.rs
-│   ├── cli.rs
-│   ├── task.rs
-│   └── storage.rs
+│   ├── lib.rs        racine de la bibliothèque
+│   ├── main.rs       binaire : parse les arguments et lance l'application
+│   ├── app.rs        répartition des commandes
+│   ├── cli.rs        définition des arguments (clap)
+│   ├── prompt.rs     saisie interactive (trait Prompter)
+│   ├── task.rs       modèles Task et Etat
+│   ├── todo_list.rs  opérations sur la liste de tâches
+│   ├── storage.rs    lecture et écriture du fichier JSON
+│   ├── display.rs    mise en forme des tâches
+│   ├── date.rs       lecture d'une date d'échéance
+│   └── errors.rs     type d'erreur TodoError
+│
+├── tests
+│   ├── app.rs        tests des commandes de bout en bout
+│   ├── cli.rs        tests du binaire
+│   └── common        prompteur de test
 │
 ├── Cargo.toml
+├── Cargo.lock
 ├── README.md
-├── LICENSE
+├── LICENCE
 └── .gitignore
 ```
+
+Chaque module a une seule responsabilité : `storage.rs` ne fait que lire
+et écrire le fichier, `display.rs` que mettre en forme, `todo_list.rs`
+que modifier la liste de tâches. Les fonctions d'affichage renvoient
+un texte et les fonctions de stockage reçoivent le chemin du fichier :
+tout est donc testable sans terminal ni fichier de données réel.
 
 ---
 
@@ -182,17 +229,33 @@ todo-gosse
 | serde | Sérialisation des données |
 | serde_json | Stockage JSON |
 | colored | Couleurs dans le terminal |
+| directories | Emplacement du fichier de données |
+| chrono | Dates de création, de mise à jour et d'échéance |
+
+`tempfile` est ajouté en dépendance de développement, pour les tests.
+
+---
+
+## Tests
+
+```bash
+cargo test
+```
+
+Les tests unitaires vivent dans chaque module (`src/*.rs`), les tests
+de bout en bout des commandes dans `tests/app.rs` et les tests du
+binaire dans `tests/cli.rs`.
 
 ---
 
 # Améliorations futures
 
 - [x] Modifier une tâche existante
-- [ ] Ajouter une date d'échéance
+- [x] Ajouter une date d'échéance
 - [ ] Ajouter des priorités
 - [ ] Ajouter des catégories
 - [ ] Recherche de tâches
-- [ ] Tests unitaires
+- [x] Tests unitaires
 - [ ] Synchronisation cloud
 - [ ] Export CSV / Markdown
 - [ ] Notifications
@@ -219,4 +282,4 @@ Ce projet a été développé afin de mettre en pratique plusieurs concepts fond
 
 Distribué sous licence **MIT**.
 
-Voir le fichier `LICENSE` pour plus d'informations.
+Voir le fichier `LICENCE` pour plus d'informations.
