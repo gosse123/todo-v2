@@ -9,6 +9,7 @@ repository = "https://github.com/gosse123/todo-v2"
 readme = "README.md"
 keywords = ["cli", "todo"]
 categories = ["command-line-utilities"]
+exclure = [".github/"]
 
 [dependencies]
 clap = { version = "4", features = ["derive"] }
