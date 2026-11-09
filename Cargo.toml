@@ -2,6 +2,7 @@
 name = "todo-gosse"
 version = "0.2.0"
 edition = "2024"
+rust-version = "1.85"
 authors = ["nahounou gosse"]
 description = "Une application CLI de gestion de tâches"
 license = "MIT"
@@ -9,6 +10,7 @@ repository = "https://github.com/gosse123/todo-v2"
 readme = "README.md"
 keywords = ["cli", "todo"]
 categories = ["command-line-utilities"]
+exclure = [".github/"]
 
 [dependencies]
 clap = { version = "4", features = ["derive"] }
